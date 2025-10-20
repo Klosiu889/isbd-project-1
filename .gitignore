@@ -1,0 +1,3 @@
+*.o
+read_mmap_test
+*.txt
