@@ -1,9 +1,6 @@
 #include <fcntl.h>
-#include <inttypes.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/mman.h>
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
@@ -11,6 +8,7 @@
 #include "const.h"
 #include "crc64.h"
 #include "read_strategy.h"
+#include "utils.h"
 
 void read_sequential(const char *filename) {
     int fd = open(filename, O_RDONLY);
@@ -23,6 +21,10 @@ void read_sequential(const char *filename) {
 
     uint64_t crc = 0;
     unsigned char *buffer = malloc(BLOCK_SIZE * sizeof(unsigned char));
+    if (buffer == NULL) {
+        exit(EXIT_FAILURE);
+    }
+
     ssize_t bytes;
 
     if (clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
@@ -42,9 +44,7 @@ void read_sequential(const char *filename) {
     double elapsed =
         (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) * 1e-9;
 
-    printf("Read sequential\n");
-    printf("Time elapsed: %lf s\n", elapsed);
-    printf("CRC64 calculated: 0x%" PRIX64 "\n", crc);
+    print_results("Read sequential", elapsed, crc);
 
     close(fd);
     free(buffer);
@@ -65,6 +65,9 @@ void read_random(const char *filename) {
 
     uint64_t crc = 0;
     unsigned char *buffer = malloc(BLOCK_SIZE * sizeof(unsigned char));
+    if (buffer == NULL) {
+        exit(EXIT_FAILURE);
+    }
 
     off_t front = 0;
     off_t back = size - BLOCK_SIZE;
@@ -99,9 +102,7 @@ void read_random(const char *filename) {
     double elapsed =
         (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) * 1e-9;
 
-    printf("Read random\n");
-    printf("Time elapsed: %lf s\n", elapsed);
-    printf("CRC64 calculated: 0x%" PRIX64 "\n", crc);
+    print_results("Read random", elapsed, crc);
 
     close(fd);
     free(buffer);

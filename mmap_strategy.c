@@ -1,6 +1,4 @@
 #include <fcntl.h>
-#include <inttypes.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/mman.h>
@@ -11,6 +9,7 @@
 #include "const.h"
 #include "crc64.h"
 #include "mmap_strategy.h"
+#include "utils.h"
 
 void mmap_sequential(const char *filename) {
     int fd = open(filename, O_RDONLY);
@@ -55,9 +54,7 @@ void mmap_sequential(const char *filename) {
     double elapsed =
         (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) * 1e-9;
 
-    printf("Mmap sequential\n");
-    printf("Time elapsed: %lf s\n", elapsed);
-    printf("CRC64 calculated: 0x%" PRIX64 "\n", crc);
+    print_results("Mmap sequential", elapsed, crc);
 
     munmap(data, size);
     close(fd);
@@ -118,9 +115,7 @@ void mmap_random(const char *filename) {
     double elapsed =
         (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) * 1e-9;
 
-    printf("Mmap random\n");
-    printf("Time elapsed: %lf s\n", elapsed);
-    printf("CRC64 calculated: 0x%" PRIX64 "\n", crc);
+    print_results("Mmap random", elapsed, crc);
 
     munmap(data, size);
     close(fd);
