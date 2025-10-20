@@ -20,7 +20,8 @@ void read_sequential(const char *filename) {
     struct timespec start, end;
 
     uint64_t crc = 0;
-    unsigned char *buffer = malloc(BLOCK_SIZE * sizeof(unsigned char));
+    unsigned char *buffer =
+        (unsigned char *)malloc(BLOCK_SIZE * sizeof(unsigned char));
     if (buffer == NULL) {
         exit(EXIT_FAILURE);
     }
@@ -64,7 +65,8 @@ void read_random(const char *filename) {
     struct timespec start, end;
 
     uint64_t crc = 0;
-    unsigned char *buffer = malloc(BLOCK_SIZE * sizeof(unsigned char));
+    unsigned char *buffer =
+        (unsigned char *)malloc(BLOCK_SIZE * sizeof(unsigned char));
     if (buffer == NULL) {
         exit(EXIT_FAILURE);
     }
