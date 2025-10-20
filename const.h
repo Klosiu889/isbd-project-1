@@ -2,5 +2,6 @@
 #define CONST_H
 
 #define BLOCK_SIZE (4 * 1024 * 1024)
+#define AVAILABLE_MEMORY (30 * 1024 * 1024)
 
 #endif // CONST_H

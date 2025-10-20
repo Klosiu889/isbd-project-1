@@ -59,7 +59,11 @@ void read_random(const char *filename) {
     }
 
     struct stat st;
-    fstat(fd, &st);
+    if (fstat(fd, &st) < 0) {
+        close(fd);
+        perror("fstat");
+        exit(EXIT_FAILURE);
+    }
     off_t size = st.st_size;
 
     struct timespec start, end;
